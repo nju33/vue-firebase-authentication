@@ -1,95 +1,86 @@
-import Vue from 'vue';
+import Vue, {CreateElement} from 'vue';
 import Component from 'vue-class-component';
 import * as firebase from 'firebase';
-import * as BounceLoader from 'vue-spinner/src/BounceLoader.vue';
-// import Asset from 'decorators/asset';
+import * as firebaseui from 'firebaseui';
 import template from './template.vue';
-import './style.less';
-
-interface Auth {
-  // providers: firebase.auth.AuthProvider[];
-
-  googleLogin(): void;
-  twitterLogin(): void;
-  facebookLogin(): void;
-  githubLogin(): void;
-}
+// import './style.less';
 
 @Component({
-  components: {
-    BounceLoader: BounceLoader.default,
-  },
   template,
   props: {
-    // mailAndPassword: Boolean,
     twitter: Boolean,
     facebook: Boolean,
     github: Boolean,
     google: Boolean,
+    email: Boolean,
+    phone: Boolean,
+    onLogged: Function,
   },
 })
-export class Authentication extends Vue implements Auth {
-  provider = new firebase.auth.GithubAuthProvider();
-  inited: boolean = false;
+export class Authentication extends Vue {
   authenticated: boolean = false;
   twitter: boolean;
   facebook: boolean;
-  github: boolean;
   google: boolean;
+  github: boolean;
+  email: boolean;
+  phone: boolean;
+  onLogged: () => void;
 
-  // get providers(): firebase.auth.AuthProvider[] {
-  //   const result: firebase.auth.AuthProvider[] = [];
-  //
-  //   if (this.twitter) {
-  //     result.push(new firebase.auth.TwitterAuthProvider());
-  //   }
-  //   if (this.facebook) {
-  //     result.push(new firebase.auth.FacebookAuthProvider());
-  //   }
-  //   if (this.github) {
-  //     result.push(new firebase.auth.GithubAuthProvider());
-  //   }
-  //   if (this.google) {
-  //     result.push(new firebase.auth.GoogleAuthProvider());
-  //   }
-  //
-  //   return result;
-  // }
+  get signInOptions(): string[] {
+    const result: string[] = [];
+    if (this.twitter) {
+      result.push(firebase.auth.TwitterAuthProvider.PROVIDER_ID);
+    }
+    if (this.facebook) {
+      result.push(firebase.auth.FacebookAuthProvider.PROVIDER_ID);
+    }
+    if (this.google) {
+      result.push(firebase.auth.GoogleAuthProvider.PROVIDER_ID);
+    }
+    if (this.github) {
+      result.push(firebase.auth.GithubAuthProvider.PROVIDER_ID);
+    }
+    if (this.email) {
+      result.push(firebase.auth.EmailAuthProvider.PROVIDER_ID);
+    }
+    if (this.phone) {
+      result.push(firebase.auth.PhoneAuthProvider.PROVIDER_ID);
+    }
+    return result;
+  }
 
-  login = () => {};
+  mounted(): void {
+    if (
+      !(
+        this.twitter ||
+        this.facebook ||
+        this.google ||
+        this.github ||
+        this.email ||
+        this.phone
+      )
+    ) {
+      throw new Error('Please specify at least one provider');
+    }
 
-  googleLogin = () => {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithRedirect(provider);
-  };
+    const ui = new firebaseui.auth.AuthUI(firebase.auth());
+    const config = {
+      signInOptions: this.signInOptions,
+    };
 
-  twitterLogin = () => {
-    const provider = new firebase.auth.TwitterAuthProvider();
-    firebase.auth().signInWithRedirect(provider);
-  };
-
-  facebookLogin = () => {
-    const provider = new firebase.auth.FacebookAuthProvider();
-    firebase.auth().signInWithRedirect(provider);
-  };
-
-  githubLogin = () => {
-    const provider = new firebase.auth.GithubAuthProvider();
-    firebase.auth().signInWithRedirect(provider);
-  };
-
-  githubLogout = () => {
-    firebase.auth().signOut();
-  };
-
-  mounted() {
-    firebase.auth().onAuthStateChanged(user => {
-      if (!this.inited) {
-        this.inited = true;
+    firebase.auth().onAuthStateChanged(async user => {
+      if (user === null) {
+        this.authenticated = false;
+        await import('firebaseui/dist/firebaseui.css');
+        ui.start('#vue-firebase-authentication-ui', config);
       }
 
       if (user) {
         this.authenticated = true;
+        if (typeof this.onLogged === 'function') {
+          this.onLogged();
+        }
       }
     });
   }

@@ -1,13 +1,14 @@
 const {DefinePlugin} = require('webpack');
 const {CheckerPlugin} = require('awesome-typescript-loader');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const BabiliWebpackPlugin = require('babili-webpack-plugin');
 
 module.exports = {
   target: 'web',
-  devtool: 'eval-source-map',
-  entry: __dirname + '/src/index.ts',
+  devtool: false,
+  entry: __dirname + '/src/components/authentication',
   output: {
-    path: __dirname + '/tmp',
+    path: __dirname + '/dist',
     filename: 'authentication.js',
   },
   resolve: {
@@ -66,13 +67,14 @@ module.exports = {
   plugins: [
     // https://medium.com/netscape/firebase-cloud-functions-with-typescript-and-webpack-7781c882a05b#9745
     new CheckerPlugin(),
-    new HtmlWebpackPlugin({
-      template: __dirname + '/dev.html',
-    }),
     new DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+        NODE_ENV: "'production'",
       },
+    }),
+    new BabiliWebpackPlugin({
+      removeConsole: true,
+      removeDebugger: true,
     }),
   ],
 };

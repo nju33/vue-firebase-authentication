@@ -8,63 +8,53 @@ import {Authentication} from 'components/authentication';
 Vue.use(Router);
 
 const config = {
-  apiKey: "AIzaSyBnvDDDmniFTwB8-GC3VUlWWhpfVigZ3f0",
-  authDomain: "nju333333.firebaseapp.com",
-  databaseURL: "https://nju333333.firebaseio.com"
+  apiKey: 'AIzaSyBnvDDDmniFTwB8-GC3VUlWWhpfVigZ3f0',
+  authDomain: 'nju333333.firebaseapp.com',
+  databaseURL: 'https://nju333333.firebaseio.com',
 };
 firebase.initializeApp(config);
 
 let router: Router;
 
 @Component({
-  template: '<router-view></router-view>'
+  template: '<router-view></router-view>',
 })
 class App extends Vue {}
 
 @Component({
-  // ここではすべてのコンポーネントオプションが許可されています
-  template: '<div @click="onClick">{{msg}}</div>',
+  template: '<button @click="logout">logout</button>',
 })
-class A extends Vue {
-  // 初期データはインスタンスプロパティとして宣言できます
-  msg: string = 'hoge!';
-  // コンポーネントメソッドはインスタンスメソッドとして宣言できます
-  onClick (): void {
-    console.log(9);
-    router.push('/fuga');
+class Logout extends Vue {
+  async logout(): Promise<void> {
+    try {
+      await firebase.auth().signOut();
+      /* something... */
+    } catch (err) {
+      throw err;
+    }
   }
 }
 
 @Component({
-  // ここではすべてのコンポーネントオプションが許可されています
-  template: '<div @click="onClick">{{msg}}</div>',
+  components: {
+    Authentication,
+    Logout,
+  },
+  template: `
+<div>
+  <Authentication :twitter="true" :github="true">
+    <Logout />
+  </Authentication>
+</div>
+  `,
 })
-class B extends Vue {
-  // 初期データはインスタンスプロパティとして宣言できます
-  msg: string = 'fuga!';
-  // コンポーネントメソッドはインスタンスメソッドとして宣言できます
-  onClick (): void {
-    console.log(9);
-    router.push('/');
-    // router.push('/');
-  }
-}
-
-
+class Main extends Vue {}
 
 router = new Router({
   routes: [
     {
       path: '/',
-      component: A,
-    },
-    {
-      path: '/fuga',
-      component: B,
-    },
-    {
-      path: '/auth',
-      component: Authentication,
+      component: Main,
     },
     {
       path: '*',
@@ -73,13 +63,7 @@ router = new Router({
   ],
 });
 
-console.log(router);
-
 const app = new Vue({
   router,
-  render: h => h(App)
+  render: h => h(App),
 }).$mount('#app');
-
-console.log(app);
-
-// router.replace('/app');

@@ -1,26 +1,34 @@
 {
-  "name": "vue-firebase-authentication",
-  "version": "1.0.0",
+  "name": "@nju33/vue-firebase-authentication",
+  "version": "0.0.0",
   "description": "",
-  "main": "index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./dist/authentication.js",
+  "types": "./authentication.d.ts",
   "scripts": {
-    "dev": "NODE_ENV=development webpack-dev-server --config webpack.config.dev.js"
+    "dev":
+      "NODE_ENV=development webpack-dev-server --config webpack.config.dev.js",
+    "build": "webpack --progress --config webpack.config.build.js",
+    "prebase": "yarn build"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "nju33",
+  "license": "MIT",
   "dependencies": {
     "firebase": "^4.6.0",
+    "firebaseui": "^2.4.1",
     "vue": "^2.5.2",
     "vue-class-component": "^6.0.0",
-    "vue-router": "^3.0.1",
-    "vue-spinner": "^1.0.3"
+    "vue-router": "^3.0.1"
   },
   "devDependencies": {
     "@types/vue": "^2.0.0",
     "@types/vue-router": "^2.0.0",
     "@types/webpack": "^3.0.14",
     "awesome-typescript-loader": "^3.2.3",
+    "babili-webpack-plugin": "^0.1.2",
     "css-loader": "^0.28.7",
     "html-loader": "^0.5.1",
     "html-webpack-plugin": "^2.30.1",
@@ -33,8 +41,7 @@
     "vue-loader": "^13.3.0",
     "vue-template-compiler": "^2.5.2",
     "webpack": "^3.8.1",
-    "webpack-dev-server": "^2.9.3",
-    "webpack-node-externals": "^1.6.0"
+    "webpack-dev-server": "^2.9.3"
   },
   "peerDependencies": {
     "firebase": "^4.6.0"
