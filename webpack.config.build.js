@@ -14,8 +14,6 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.json', '.js', '.vue'],
     alias: {
-      // https://jp.vuejs.org/v2/guide/installation.html#Webpack
-      vue$: 'vue/dist/vue.esm.js',
       components: __dirname + '/src/components',
       decorators: __dirname + '/src/decorators',
     },
@@ -31,33 +29,6 @@ module.exports = {
           },
         ],
       },
-      // {
-      //   test: /vue-spinner.*\.vue$/,
-      //   use: [
-      //     {
-      //       loader: 'vue-loader',
-      //     },
-      //   ],
-      // },
-      {
-        test: /\.vue$/,
-        exclude: /node_modules/,
-        use: [
-          {
-            loader: 'html-loader?exportAsEs6Default',
-          },
-        ],
-      },
-      // {
-      //   test: /\.less$/,
-      //   use: [
-      //     'style-loader',
-      //     'css-loader',
-      //     {
-      //       loader: 'less-loader',
-      //     },
-      //   ],
-      // },
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
@@ -65,7 +36,6 @@ module.exports = {
     ],
   },
   plugins: [
-    // https://medium.com/netscape/firebase-cloud-functions-with-typescript-and-webpack-7781c882a05b#9745
     new CheckerPlugin(),
     new DefinePlugin({
       'process.env': {

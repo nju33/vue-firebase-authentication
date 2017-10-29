@@ -2,11 +2,8 @@ import Vue, {CreateElement, VNode} from 'vue';
 import Component from 'vue-class-component';
 import * as firebase from 'firebase';
 import * as firebaseui from 'firebaseui';
-// import template from './template.vue';
-// import './style.less';
 
 @Component({
-  // template,
   props: {
     twitter: Boolean,
     facebook: Boolean,
