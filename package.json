@@ -1,6 +1,6 @@
 {
   "name": "@nju33/vue-firebase-authentication",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "publishConfig": {
     "access": "public"
@@ -8,8 +8,7 @@
   "main": "./dist/authentication.js",
   "types": "./authentication.d.ts",
   "scripts": {
-    "dev":
-      "NODE_ENV=development webpack-dev-server --config webpack.config.dev.js",
+    "dev": "NODE_ENV=development webpack-dev-server --config webpack.config.dev.js",
     "build": "webpack --progress --config webpack.config.build.js",
     "prebase": "yarn build"
   },
