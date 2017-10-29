@@ -1,12 +1,12 @@
-import Vue, {CreateElement} from 'vue';
+import Vue, {CreateElement, VNode} from 'vue';
 import Component from 'vue-class-component';
 import * as firebase from 'firebase';
 import * as firebaseui from 'firebaseui';
-import template from './template.vue';
+// import template from './template.vue';
 // import './style.less';
 
 @Component({
-  template,
+  // template,
   props: {
     twitter: Boolean,
     facebook: Boolean,
@@ -50,7 +50,7 @@ export class Authentication extends Vue {
     return result;
   }
 
-  mounted(): void {
+  public mounted(): void {
     if (
       !(
         this.twitter ||
@@ -83,5 +83,16 @@ export class Authentication extends Vue {
         }
       }
     });
+  }
+
+  public render(h: CreateElement, innerElement: VNode): VNode {
+    let children: VNode[];
+    if (this.authenticated) {
+      children = this.$slots.default;
+    } else {
+      children = [<div id="vue-firebase-authentication-ui" />];
+    }
+
+    return <div id="hoge">{children}</div>;
   }
 }

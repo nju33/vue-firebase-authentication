@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, {CreateElement, VNode} from 'vue';
 import Router from 'vue-router';
 import Component from 'vue-class-component';
 import * as firebase from 'firebase/app';
@@ -16,39 +16,43 @@ firebase.initializeApp(config);
 
 let router: Router;
 
-@Component({
-  template: '<router-view></router-view>',
-})
-class App extends Vue {}
+@Component
+class App extends Vue {
+  public render(h: CreateElement): VNode {
+    return <router-view />;
+  }
+}
 
 @Component({
-  template: '<button @click="logout">logout</button>',
+  template: '',
 })
 class Logout extends Vue {
-  async logout(): Promise<void> {
+  private logout: () => Promise<void> = async () => {
     try {
       await firebase.auth().signOut();
       /* something... */
     } catch (err) {
       throw err;
     }
+  };
+
+  public render(h: CreateElement): VNode {
+    return <button onClick={this.logout}>logout</button>;
   }
 }
 
-@Component({
-  components: {
-    Authentication,
-    Logout,
-  },
-  template: `
-<div>
-  <Authentication :twitter="true" :github="true">
-    <Logout />
-  </Authentication>
-</div>
-  `,
-})
-class Main extends Vue {}
+@Component
+class Main extends Vue {
+  render(h: CreateElement): VNode {
+    return (
+      <div>
+        <Authentication twitter={true} github={true}>
+          <Logout />
+        </Authentication>
+      </div>
+    );
+  }
+}
 
 router = new Router({
   routes: [

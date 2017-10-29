@@ -12,7 +12,7 @@ module.exports = {
     filename: 'authentication.js',
   },
   resolve: {
-    extensions: ['.ts', '.json', '.js', '.vue'],
+    extensions: ['.ts', '.tsx', '.json', '.js', '.vue'],
     alias: {
       // https://jp.vuejs.org/v2/guide/installation.html#Webpack
       vue$: 'vue/dist/vue.esm.js',
@@ -23,7 +23,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.ts$/,
+        test: /\.tsx?$/,
         exclude: /node_modules/,
         use: [
           {

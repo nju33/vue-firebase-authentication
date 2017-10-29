@@ -5,13 +5,13 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   target: 'web',
   devtool: 'eval-source-map',
-  entry: __dirname + '/src/index.ts',
+  entry: __dirname + '/src/index.tsx',
   output: {
     path: __dirname + '/tmp',
     filename: 'authentication.js',
   },
   resolve: {
-    extensions: ['.ts', '.json', '.js', '.vue'],
+    extensions: ['.ts', '.tsx', '.json', '.js', '.vue'],
     alias: {
       // https://jp.vuejs.org/v2/guide/installation.html#Webpack
       vue$: 'vue/dist/vue.esm.js',
@@ -22,11 +22,14 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.ts$/,
+        test: /\.tsx?$/,
         exclude: /node_modules/,
         use: [
           {
             loader: 'awesome-typescript-loader',
+            options: {
+              useBabel: true,
+            },
           },
         ],
       },
